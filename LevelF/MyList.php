@@ -113,7 +113,16 @@ class MyList
      */
     public function getFirstElementByValue($value)
     {
-        /** @TODO */
-        return $this;
+        $array = array();
+
+        $head = $this->head;
+
+        while (null !== $head) {
+            $array[$head->getValue()] = $head;
+
+            $head = $head->getNext();
+        }
+
+        return array_key_exists($value, $array) ? $array[$value] : null;
     }
 }
