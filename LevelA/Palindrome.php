@@ -20,9 +20,13 @@ class Palindrome
      */
     public function generatePalindrome()
     {
-        /** @TODO */
-
-        return 'abccba';
+        return sprintf('%s%s', $this->str, $this->reverseString());
     }
 
+    private function reverseString()
+    {
+        preg_match_all('/./us', $this->str, $ar);
+
+        return join('', array_reverse($ar[0]));
+    }
 }
