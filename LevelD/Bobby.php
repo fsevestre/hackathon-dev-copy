@@ -22,9 +22,69 @@ class Bobby
      */
     public function giveMoney($price)
     {
-        /** @TODO */
+        $walletTmp = array();
 
-        return false;
+        foreach ($this->wallet as $money) {
+            if (is_numeric($money)) {
+                if (!array_key_exists($money, $walletTmp)) {
+                    $walletTmp[$money] = 1;
+                } else {
+                    ++$walletTmp[$money];
+                }
+            }
+        }
+
+        krsort($walletTmp);
+
+        $billetsToRemove = array();
+        foreach ($walletTmp as $value => $total) {
+            for ($i = 0; $i < $total; $i++) {
+                $price = $price - $value;
+
+                $billetsToRemove[] = $value;
+
+                if ($price <= 0) {
+                    break 2;
+                }
+            }
+        }
+
+        $tmpTotal = $this->total;
+        $backupWallet = $this->wallet;
+
+        foreach ($billetsToRemove as $billetToRemove) {
+            $pouetWallet = $this->wallet;
+
+            foreach ($pouetWallet as $key => $value) {
+                if ($billetToRemove == $value) {
+                    $tmpTotal = $tmpTotal - $value;
+
+                    unset($pouetWallet[$key]);
+
+                    break;
+                }
+            }
+
+            $this->wallet = $pouetWallet;
+        }
+
+        if ($tmpTotal > 0) {
+            $this->total = $tmpTotal;
+        } else {
+            $this->wallet = $backupWallet;
+
+            return false;
+        }
+
+        $countResultInt = false;
+        foreach ($this->wallet as $wallet) {
+            if (is_numeric($wallet)) {
+                $countResultInt = true;
+                break;
+            }
+        }
+
+        return $countResultInt;
     }
 
     /**
